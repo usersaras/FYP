@@ -1,0 +1,16 @@
+.dashboard-form-padding {
+	margin-top: 10px;
+}
+
+.alert {
+	margin-top: 10px;
+}
+
+.my-custom-scrollbar {
+	position: relative;
+	height: 200px;
+	overflow: auto;
+	}
+	.table-wrapper-scroll-y {
+	display: block;
+	}

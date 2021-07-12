@@ -1,0 +1,48 @@
+.bottom-padding {
+    padding: 20px;
+}
+
+input.btn-color {
+    background-color: #EA2C58;
+    color: white;
+    width: 100%;
+}
+
+input.btn-color:hover {
+    transition-duration: 0.2s;
+    background-color: white;
+    color: #EA2C58;
+    border: 1px solid  #EA2C58
+}
+
+.grey_bg{
+    background-color: #F9F9FF;
+    padding-top: 20px;
+    padding-bottom: 30px; 
+}
+
+#form1 select{
+width: 100%;
+margin-top: 10px;
+padding: 7px;
+}
+
+#form1 input{
+    width: 100%;
+    margin-top: 10px;
+    }
+
+.address-label {
+    margin-top: 20px;
+    margin-bottom: -10px;
+    color: #EA2C58;
+    }
+
+.dob{
+    margin-top: 20px;
+    margin-bottom: -30px;
+}
+
+.alert {
+    margin-top: 10px; 
+}

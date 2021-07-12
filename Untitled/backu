@@ -1,0 +1,278 @@
+<?php 
+session_start();
+if(isset($_SESSION['role'])){
+ 
+if($_SESSION['role']!="Patient"){
+  echo 'You do not have access to this page';
+}
+else {
+// echo $_SESSION['id'];
+
+include("headerandfooter/header.php");
+
+?>
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
+            <!-- Infected Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Infected</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <?php
+                        $infected_count_sql = "SELECT * FROM COVID_DB WHERE RECOVERY=1";
+                        $infected_count_qry = mysqli_query($connection, $infected_count_sql);
+
+                        echo mysqli_num_rows($infected_count_qry);
+                        ?>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recovered Card -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Recovered</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <?php
+                        $recovered_count_sql = "SELECT * FROM COVID_DB WHERE RECOVERY=0";
+                        $recovered_count_qry = mysqli_query($connection, $recovered_count_sql);
+
+                        echo mysqli_num_rows($recovered_count_qry);
+                        ?>
+                      </div>
+                    </div>
+
+                    <div class="col-auto">
+                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Available Beds</div>
+                      <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                          <?php
+                        $recovered_count_sql = "SELECT * FROM BED WHERE BED_STATUS='Available'";
+                        $recovered_count_qry = mysqli_query($connection, $recovered_count_sql);
+
+                        echo mysqli_num_rows($recovered_count_qry);
+                        ?>
+                          </div>
+                        </div>
+                        <!-- <div class="col">
+                          <div class="progress progress-sm mr-2">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 30%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-bed fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Total Beds</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">
+                      <?php
+                        $recovered_count_sql = "SELECT * FROM BED WHERE BED_STATUS='Booked'";
+                        $recovered_count_qry = mysqli_query($connection, $recovered_count_sql);
+
+                        echo mysqli_num_rows($recovered_count_qry);
+                        ?>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Row -->
+          <div class="row" style="background-color:  ;">
+
+          <div class="col-md-6" style="line-height: 30px;">
+            Displaying Options
+          </div>
+
+        <div class="col-md-6">
+        <input type="submit" name="submit" class="float-right btn btn-sm btn-primary" >
+            <Select type="text" class="float-right border-0" style="margin-top: 3px; margin-right: 6px;">
+                <option>SORT BY</option>
+                <option>SORT BY</option>
+                <option>SORT BY</option>
+            </select> 
+        </div>
+        </div>
+<hr />
+<div class="row">        
+
+          <?php
+
+
+// define how many results you want per page
+$results_per_page = 9;
+
+// find out the number of results stored in database
+$sql='SELECT * FROM BED';
+$result = mysqli_query($connection, $sql);
+$number_of_results = mysqli_num_rows($result);
+
+// determine number of total pages available
+$number_of_pages = ceil($number_of_results/$results_per_page);
+
+// determine which page number visitor is currently on
+if (!isset($_GET['page'])) {
+  $page = 1;
+} else {
+  $page = $_GET['page'];
+}
+
+// determine the sql LIMIT starting number for the results on the displaying page
+$this_page_first_result = ($page-1)*$results_per_page;
+
+// retrieve selected results from database and display them on page
+$sql='SELECT * FROM BED LIMIT ' . $this_page_first_result . ',' .  $results_per_page;
+$result = mysqli_query($connection, $sql);
+
+while($row = mysqli_fetch_array($result)) {
+ ?>
+
+<hr>
+
+<div class="col-xl-4 col -lg-4 col-md-12 col-sm-12">
+           
+           <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-info"><?php echo $row['BED_ID']." - ".$row['BED_CATEGORY']; ?></h6>
+              </div>
+              <div class="card-body">
+                  <table class="table table-borderless table-responsive-sm">
+                      <tr>
+                          <td>Bed ID</td>
+                          <td><?php echo $row['BED_ID']?></td>
+                      </tr>
+                      <tr>
+                          <td>Bed Category</td>
+                          <td><?php echo $row['BED_CATEGORY']?></td>
+                      </tr>
+                      <tr>
+                          <td>Bed Price</td>
+                          <td>Rs.<?php echo $row['BED_PRICE']?>/day</td>
+                      </tr>
+                      <tr>
+                          <?php
+                          $hid = $row['FK_HOSPITAL_ID'];
+                          $h_sql = "SELECT * FROM HOSPITAL WHERE HOSPITAL_ID = $hid";
+                          $h_qry = mysqli_query($connection, $h_sql);
+                          $h_row = mysqli_fetch_array($h_qry);
+                           ?>
+                          <td>Hospital</td>
+                          <td><?php echo $h_row['HOSPITAL_NAME']?></td>
+                      </tr>
+                      <tr>
+                          <td>Location</td>
+                          <td> <?php echo $h_row['HOSPITAL_DISTRICT']?>-<?php echo $h_row['HOSPITAL_WARD']?>, <?php echo $h_row['HOSPITAL_PROVINCE']?></td>
+                      </tr>
+                      <tr>
+                          <td>Availability</td>
+                          <td><?php if($row['BED_STATUS']=='Available'){
+                              echo "<button class='btn btn-success'>Available</button>";
+                              }else if($row['BED_STATUS']=='Booked'){
+                              echo "<button class='btn btn-warning'>Booked</button>";  
+                              }else if($row['BED_STATUS']=='Occupied'){
+                                echo "<button class='btn btn-primary'>Occupied</button>";  
+                                }?></td>
+                      </tr>
+
+                  </table>
+               
+                <hr>
+               <div class="row">
+                   <div class="col-md-12">
+                   <button class="btn btn-success float-lg-right">Book Now</button>
+                  <a href="individual_bed_details.php?id=<?php echo $row['BED_ID'] ?>"><button class="btn btn-primary float-lg-right" style="margin-right: 10px;">View Details</button></a>
+                   </div>
+               </div>
+              </div>
+            </div>
+</div>
+
+  
+     
+
+<?php
+}
+?>
+<div class="col-md-12 text-center" style="margin-bottom: 10px;">
+<?php
+
+// display the links to the pages
+for ($page=1;$page<=$number_of_pages;$page++) {
+  echo '<a href="view_all_beds.php?page=' . $page . '" class="btn btn-secondary">' . $page . '</a> ';
+}
+
+?>
+</div>
+           
+
+
+        </div>
+        <!-- /.row -->
+
+      </div>
+      <!-- End of Main Content -->
+
+<?php 
+include("headerandfooter/footer.php");
+
+}
+}
+else{
+  echo "You do not have access to this page!";
+}
+
+?>
